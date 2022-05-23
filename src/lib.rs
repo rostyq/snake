@@ -6,16 +6,15 @@ use lazy_static::lazy_static;
 mod alloc;
 mod wasm4;
 
+mod game;
 mod palette;
 mod snake;
-mod game;
 
 use game::Game;
 
 lazy_static! {
     static ref GAME: Mutex<Game> = Mutex::new(Game::new());
 }
-
 
 #[no_mangle]
 fn start() {

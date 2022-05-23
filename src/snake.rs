@@ -1,5 +1,5 @@
-use crate::wasm4::rect;
 use crate::palette::set_draw_color;
+use crate::wasm4::rect;
 
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub struct Point {
@@ -16,7 +16,7 @@ impl Snake {
     pub fn new() -> Self {
         Self {
             body: vec![
-                Point { x: 2, y: 0},
+                Point { x: 2, y: 0 },
                 Point { x: 1, y: 0 },
                 Point { x: 0, y: 0 },
             ],
@@ -56,4 +56,27 @@ impl Snake {
         self.body.pop()
     }
 
+    pub fn up(&mut self) {
+        if self.direction.y == 0 {
+            self.direction = Point { x: 0, y: -1 };
+        }
+    }
+
+    pub fn down(&mut self) {
+        if self.direction.y == 0 {
+            self.direction = Point { x: 0, y: 1 };
+        }
+    }
+
+    pub fn left(&mut self) {
+        if self.direction.x == 0 {
+            self.direction = Point { x: -1, y: 0 };
+        }
+    }
+
+    pub fn right(&mut self) {
+        if self.direction.x == 0 {
+            self.direction = Point { x: 1, y: 0 };
+        }
+    }
 }
