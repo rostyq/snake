@@ -1,7 +1,7 @@
 use crate::palette::set_draw_color;
 use crate::wasm4::rect;
 
-#[derive(Clone, Copy, PartialEq, Eq)]
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub struct Point {
     pub x: i32,
     pub y: i32,
@@ -54,6 +54,13 @@ impl Snake {
         }
 
         self.body.pop()
+    }
+
+    pub fn is_dead(&self) -> bool {
+        self.body
+        .iter()
+        .skip(1)
+        .any(|&section| section == self.body[0])
     }
 
     pub fn up(&mut self) {

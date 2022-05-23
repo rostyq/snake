@@ -1,6 +1,8 @@
 use crate::palette::set_draw_color;
 use crate::snake::{Point, Snake};
-use crate::wasm4::{BUTTON_DOWN, BUTTON_LEFT, BUTTON_RIGHT, BUTTON_UP, GAMEPAD1, blit, BLIT_2BPP};
+use crate::wasm4::{
+    blit, BLIT_2BPP, BUTTON_DOWN, BUTTON_LEFT, BUTTON_RIGHT, BUTTON_UP, GAMEPAD1, trace,
+};
 use fastrand::Rng;
 
 const FRUIT_WIDTH: u32 = 8;
@@ -35,7 +37,14 @@ impl Game {
 
     fn draw_fruit(&self) {
         set_draw_color(0x4320);
-        blit(&FRUIT_SPRITE, self.fruit.x * 8, self.fruit.x * 8, FRUIT_WIDTH, FRUIT_HEIGHT, FRUIT_FLAGS);
+        blit(
+            &FRUIT_SPRITE,
+            self.fruit.x * 8,
+            self.fruit.y * 8,
+            FRUIT_WIDTH,
+            FRUIT_HEIGHT,
+            FRUIT_FLAGS,
+        );
     }
 
     fn render(&self) {
@@ -48,7 +57,22 @@ impl Game {
         self.input();
 
         if self.frame_count % 15 == 0 {
-            self.snake.update();
+            let dropped_pos = self.snake.update();
+
+            if self.snake.is_dead() {
+                while self.snake.body.len() > 3 {
+                    self.snake.body.pop();
+                }
+            }
+
+            if self.snake.body[0] == self.fruit {
+                if let Some(last_pos) = dropped_pos {
+                    self.snake.body.push(last_pos);
+                }
+
+                self.fruit.x = self.rng.i32(0..20);
+                self.fruit.y = self.rng.i32(0..20);
+            }
         }
 
         self.render();
