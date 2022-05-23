@@ -3,6 +3,7 @@ mod alloc;
 mod wasm4;
 
 mod palette;
+mod snake;
 
 // use wasm4::*;
 
